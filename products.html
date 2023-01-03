@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<style>
+  img {
+    object-fit: contain;
+    max-width: 100%;
+  }
+  .imgItem {
+    height: 300px;
+  }
+  .imgItem1 {       
+    height: 150px;
+  }
+</style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="row p-3 justify-content-center">
+        <div class="col-md-6">
+          <h1 class="h3 fw-bold mb-4">產品列表</h1>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>產品名稱</th>
+                <th>原價</th>
+                <th>售價</th>
+                <th>是否啟用</th>
+                <th>查看細節</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item,key) in remoteData"
+              :key="item.id">
+                <th>{{item.category}}</th>
+                <td>{{item.origin_price}}</td>
+                <td>{{item.price}}</td>
+                <td
+                class="text-success"
+                v-if="item.is_enabled">啟用</td>
+                <td>
+                  <button class="btn btn-primary"
+                  type="button"
+                  @click="openProducts(item)"
+                  >查看細節</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <span>目前有 {{remoteData.length}} 項產品</span>
+        </div>
+        <div class="col-md-6">
+          <h1 class="h3 fw-bold mb-4">單一產品細節</h1>
+          <div v-if="tempItems.title">
+            <div class="card">
+              <img :src="tempItems.imageUrl" alt=""
+              class="card-img-top imgItem">
+              <div class="card-body">
+                <p class="fs-5 ">{{tempItems.title}}
+                  <span class="badge bg-primary ms-3">
+                    {{tempItems.tag}}</span></p>
+                <p>商品描述：{{tempItems.description}}</p>
+                <p>商品內容：{{tempItems.content}}</p>
+                <p>{{tempItems.price}} <span
+                  class="text-decoration-line-through
+                  text-muted ms-2">
+                  {{tempItems.origin_price}}</span> 
+                  {{tempItems.unit}} / 元</p>
+              </div>
+            </div>
+            
+            <!-- 由於v-for與v-if不能同時存在同一個標籤上，
+            故可以使用template標籤將此分開 -->
+            <template v-for="(item,key) in tempItems.imagesUrl"
+            :key="'images' + key">            
+              <img  :src="item" 
+              class="imgItem1 m-2">              
+            </template>            
+          </div>
+          <p v-else class="text-secondary">
+            請選擇一個商品查看</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script src="./js/products.js" type="module"></script>
+</body>
+</html>
